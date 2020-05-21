@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -623,7 +623,8 @@ public class NegativityScript : MonoBehaviour
 				yield return "sendtochaterror Can not press the button since the button is not yet accessable.";
 				yield break;
 			}
-			
+			yield return "solve";
+			yield return "strike";
 			Buttons[1].OnInteract();
 		}
 		
