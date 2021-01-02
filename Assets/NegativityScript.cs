@@ -28,9 +28,8 @@ public class NegativityScript : MonoBehaviour
 	private int[] Numbering = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	private int[] NumberingConverted = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-	private int[][] TernaryFunctions = new int[2][]{
+	private int[][] TernaryFunctions = new int[][]{
 		new int[9] {0, 0, 0, 0, 0, 0, 0, 0, 0},
-		new int[9] {6561, 2187, 729, 243, 81, 27, 9, 3, 1}
 	};
 	
 	bool Playable = false;
@@ -80,86 +79,21 @@ public class NegativityScript : MonoBehaviour
 			Debug.LogFormat("[Negativity #{2}] Original Number : {0}, Converted Number: {1}", Numbering[a].ToString(), NumberingConverted[a].ToString(), moduleId);
 		}
 		Debug.LogFormat("[Negativity #{0}] The total value: {1}", moduleId, Totale.ToString());
-
-		if (Totale > 0)
-		{
-			for (int q = 0; q < 9; q++)
-			{
-				// Convert the number to ternary.
-				for (int r = 0; r < 2; r++)
-				{
-					if (Totale >= TernaryFunctions[1][q])
-					{
-						Totale -= TernaryFunctions[1][q];
-						++TernaryFunctions[0][q];
-					}
-				}
-
-				// Replace 2s with 3 - 1.
-				for (int z = 0; z < 3; z++)
-				{
-					for (int s = 0; s < q+1; s++)
-					{
-						if (TernaryFunctions[0][s] > 1)
-						{
-							TernaryFunctions[0][s] -= 3;
-							++TernaryFunctions[0][s-1];
-						}
-					}
-				}
-			}
-		}
 		
-		if (Totale < 0)
+		int n = Totale >= 0 ? Totale : -Totale;
+		while (n > 0)
 		{
-			for (int q = 0; q < 9; q++)
-			{
-				// Convert the number to ternary.
-				for (int r = 0; r < 2; r++)
-				{
-					if (Totale <= -TernaryFunctions[1][q])
-					{
-						Totale -= -TernaryFunctions[1][q];
-						--TernaryFunctions[0][q];
-					}
-				}
-
-				// Replace -2s with -3 + 1.
-				for (int z = 0; z < 3; z++)
-				{
-					for (int s = 0; s < q+1; s++)
-					{
-						if (TernaryFunctions[0][s] < -1)
-						{
-							TernaryFunctions[0][s] += 3;
-							--TernaryFunctions[0][s-1];
-						}
-					}
-				}
-			}
+		   int rem = n%3;
+		   n = n/3;
+		   if (rem == 2)
+		   {
+			   rem = -1;
+			   n++;
+		   }
+		   Tables = Totale >= 0 ? (rem == 0 ? "0" : (rem==1) ? "+" : "-") + Tables : (rem == 0 ? "0" : (rem==1) ? "-" : "+") + Tables;
 		}
-
-		var Builder = new StringBuilder();
-		// Using StringBuilder when concatenating many strings together is more efficient,
-		// because it avoids copying and creating many string instances.
-		for (int z = 0; z < 9; z++)
-		{
-			if (TernaryFunctions[0][z] == 1)
-			{
-				Builder.Append('+');
-			}
-			else if (TernaryFunctions[0][z] == -1)
-			{
-				Builder.Append('-');
-			}
-			else if (TernaryFunctions[0][z] != 0)
-			{
-				Debug.Log("The converter is broken");
-				break;
-			}
-		}
-		Tables = Builder.ToString();
-
+		Debug.LogFormat("[Negativity #{0}] The balanced ternary generated: {1}", moduleId, Tables);
+		Tables = Regex.Replace(Tables, "0", "");
 		Debug.LogFormat("[Negativity #{0}] The answer is: {1}", moduleId, Tables);
 		StartCoroutine(Rotations());
 		Playable = true;
@@ -170,57 +104,59 @@ public class NegativityScript : MonoBehaviour
 		if (Playable)
 		{
 			Buttons[index].AddInteractionPunch(.2f);
-			if (index == 0)
+			
+			switch (index)
 			{
-				if (KSop == 0)
-				{
-					if (Silent == true) Silent = false; else Silent = true;
-				}
-				
-				else if (KSop == 1)
-				{
-					if (Ternary.text.Length < 9)
+				case 0:
+					if (KSop == 1 && Ternary.text.Length < 9)
 					{
 						Audio.PlaySoundAtTransform(SFX[1].name, transform);
 						Ternary.text += Switcher == 0 ? "-" : "+";
 					}
-				}
-			}
-
-			if (index == 1)
-			{
-				if (KSop == 0)
-				{
-					Audio.PlaySoundAtTransform(SFX[0].name, transform);
-					StopAllCoroutines();
-					StartCoroutine(Flashes());
-					Star.sprite = null;
-					KSop = 1;
-				}
-				
-				else if (KSop == 1)
-				{
-					StopAllCoroutines();
-					Debug.LogFormat("[Negativity #{0}] The submitted balance: {1}", moduleId, Ternary.text);
-					StartCoroutine(MusicPlay());
-				}
-			}
-
-			if (index == 2)
-			{
-				if (KSop == 1 && Ternary.text.Length > 0)
-				{
-					Audio.PlaySoundAtTransform(SFX[0].name, transform);
-					StartCoroutine(Clearer());
-				}
-				
-				else if (KSop == 1 && Ternary.text.Length == 0)
-				{
-					StopAllCoroutines();
-					KSop = 0;
-					RotationsNumber = (RotationsNumber - 1 + 10) % 10;
-					StartCoroutine(Rotations());
-				}
+					break;
+				case 1:
+					switch (KSop)
+					{
+						case 0:
+							Audio.PlaySoundAtTransform(SFX[0].name, transform);
+							StopAllCoroutines();
+							StartCoroutine(Flashes());
+							Star.sprite = null;
+							KSop = 1;
+							break;
+						case 1:
+							StopAllCoroutines();
+							Debug.LogFormat("[Negativity #{0}] The submitted balance: {1}", moduleId, Ternary.text);
+							StartCoroutine(MusicPlay());
+							break;
+						default:
+							break;
+					}
+					break;
+				case 2:
+					switch (KSop)
+					{
+						case 1:
+							switch (Ternary.text.Length)
+							{
+								case 0:
+									StopAllCoroutines();
+									KSop = 0;
+									RotationsNumber = (RotationsNumber - 1 + 10) % 10;
+									StartCoroutine(Rotations());
+									break;
+								default:
+									Audio.PlaySoundAtTransform(SFX[0].name, transform);
+									StartCoroutine(Clearer());
+									break;
+							}
+							break;
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -230,48 +166,14 @@ public class NegativityScript : MonoBehaviour
 		while (true)
 		{
 			for (int b = RotationsNumber; b < 10; b++)
-			{
-				if (Silent == false)
-				{
-					Audio.PlaySoundAtTransform(SFX[1].name, transform);
-				}
-				
+			{	
 				RotationsNumber = (RotationsNumber + 1) % 10;
-				if (b == 0)
-				{
-					if (Status[b] == 1)
-					{
-						Star.sprite = Stars[0];
-					}
-					
-					else
-					{
-						Star.sprite = Stars[1];
-					}
-				}
-				
-				else
-				{
-					Star.sprite = null;
-				}
-				
-				if (Status[b] == 0)
-				{
-					ButtonRenderer[0].material = BlackAndWhite[0];
-					ButtonRenderer[1].material = BlackAndWhite[1];
-					NumberLine.color = Color.white;
-					NumberLine.text = Numbering[b].ToString();
-					yield return new WaitForSecondsRealtime(1f);
-				}
-
-				else
-				{
-					ButtonRenderer[0].material = BlackAndWhite[1];
-					ButtonRenderer[1].material = BlackAndWhite[0];
-					NumberLine.color = Color.black;
-					NumberLine.text = Numbering[b].ToString();
-					yield return new WaitForSecondsRealtime(1f);
-				}
+				Star.sprite = b == 0 ? Status[b] == 1 ? Stars[0] : Stars[1] : null;
+				ButtonRenderer[0].material = Status[b] == 0 ? BlackAndWhite[0] : BlackAndWhite[1];
+				ButtonRenderer[1].material = Status[b] == 0 ? BlackAndWhite[1] : BlackAndWhite[0];
+				NumberLine.color = Status[b] == 0 ? Color.white : Color.black;
+				NumberLine.text = Numbering[b].ToString();
+				yield return new WaitForSecondsRealtime(1f);
 			}
 		}
 	}
@@ -283,20 +185,9 @@ public class NegativityScript : MonoBehaviour
 			NumberLine.text = "";
 			for (int c = 0; c < 2; c++)
 			{
-				if (c == 0)
-				{
-					ButtonRenderer[0].material = BlackAndWhite[0];
-					ButtonRenderer[1].material = BlackAndWhite[1];
-					Switcher = 0;
-				}
-
-				else
-				{
-					ButtonRenderer[0].material = BlackAndWhite[1];
-					ButtonRenderer[1].material = BlackAndWhite[0];
-					Switcher = 1;
-				}
-
+				ButtonRenderer[0].material = c == 0 ? BlackAndWhite[0] : BlackAndWhite[1];
+				ButtonRenderer[1].material = c == 0 ? BlackAndWhite[1] : BlackAndWhite[0];
+				Switcher = c;
 				yield return new WaitForSecondsRealtime(0.8f);
 			}
 		}
@@ -321,293 +212,49 @@ public class NegativityScript : MonoBehaviour
 		string Answer = Ternary.text;
 		Ternary.text = "";
 		Audio.PlaySoundAtTransform(SFX[3].name, transform);
+		float Switches = 0.2f;
+		string[] Cycles = {"P", "N", "Po", "Ne", "Pos", "Neg", "Posi", "Nega", "Posit", "Negat", "Positi", "Negati", "Positiv", "Negativ", "Positivi", "Negativi", "Positivit", "Negativit", "Positivity", "Negativity", "The", "Balance", "Was", "Disturbed", "I", "Will", "Restore", "Balance", "I", "Will", "Provide", "Judgement", "My", "Final", "Decision", "Is"};
+		for (int x = 0; x < 36; x++)
+		{
+			ButtonRenderer[0].material = x % 2 == 0 ? BlackAndWhite[0] : BlackAndWhite[1];
+			ButtonRenderer[1].material = x % 2 == 0 ? BlackAndWhite[1] : BlackAndWhite[0];
+			NumberLine.color = x % 2 == 0 ? Color.white : Color.black;
+			NumberLine.text = Cycles[x];
+			SAndC[0].text = x < 20 ? x % 2 == 0 ? "+" : "-" : x % 2 == 0 ? "O" : "X";
+			SAndC[1].text = x < 20 ? x % 2 == 0 ? "+" : "-" : x % 2 == 0 ? "X" : "O";
+			yield return new WaitForSecondsRealtime(Switches);
+			Switches = x % 4 == 3 ? Switches * 0.8f : Switches;
+		}
 		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "P";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.2f);
+		SAndC[0].text = ""; SAndC[1].text = "";
+		ButtonRenderer[0].material = Answer == Tables ? BlackAndWhite[1] : BlackAndWhite[0];
+		ButtonRenderer[1].material = Answer == Tables ? BlackAndWhite[0] : BlackAndWhite[1];
+		NumberLine.color = Answer == Tables ? Color.black : Color.white;
+		NumberLine.text = Answer == Tables ? "Peace" : "Chaos";
 		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "N";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.2f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Po";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.2f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Ne";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.2f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Pos";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.16f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Neg";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.16f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Posi";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.16f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Nega";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.16f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Posit";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.128f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Negat";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.128f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Positi";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.128f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Negati";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.128f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Positiv";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.1024f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Negativ";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.1024f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Positivi";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.1024f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Negativi";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.1024f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Positivit";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.08192f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Negativit";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.08192f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Positivity";
-		SAndC[0].text = "+"; SAndC[1].text = "+";
-		yield return new WaitForSecondsRealtime(0.08192f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Negativity";
-		SAndC[0].text = "-"; SAndC[1].text = "-";
-		yield return new WaitForSecondsRealtime(0.08192f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "The";
-		SAndC[0].text = "O"; SAndC[1].text = "X";
-		yield return new WaitForSecondsRealtime(0.065536f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Balance";
-		SAndC[0].text = "X"; SAndC[1].text = "O";
-		yield return new WaitForSecondsRealtime(0.065536f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Is";
-		SAndC[0].text = "O"; SAndC[1].text = "X";
-		yield return new WaitForSecondsRealtime(0.065536f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Disturbed";
-		SAndC[0].text = "X"; SAndC[1].text = "O";
-		yield return new WaitForSecondsRealtime(0.065536f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "I";
-		SAndC[0].text = "O"; SAndC[1].text = "X";
-		yield return new WaitForSecondsRealtime(0.065536f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Will";
-		SAndC[0].text = "X"; SAndC[1].text = "O";
-		yield return new WaitForSecondsRealtime(0.065536f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Now";
-		SAndC[0].text = "O"; SAndC[1].text = "X";
-		yield return new WaitForSecondsRealtime(0.065536f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Decide";
-		SAndC[0].text = "X"; SAndC[1].text = "O";
-		yield return new WaitForSecondsRealtime(0.065536f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "I";
-		SAndC[0].text = "O"; SAndC[1].text = "X";
-		yield return new WaitForSecondsRealtime(0.0524288f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Have";
-		SAndC[0].text = "X"; SAndC[1].text = "O";
-		yield return new WaitForSecondsRealtime(0.0524288f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Now";
-		SAndC[0].text = "O"; SAndC[1].text = "X";
-		yield return new WaitForSecondsRealtime(0.0524288f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Decided";
-		SAndC[0].text = "X"; SAndC[1].text = "O";
-		yield return new WaitForSecondsRealtime(0.0524288f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "My";
-		SAndC[0].text = "O"; SAndC[1].text = "X";
-		yield return new WaitForSecondsRealtime(0.04194304f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Final";
-		SAndC[0].text = "X"; SAndC[1].text = "O";
-		yield return new WaitForSecondsRealtime(0.04194304f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[0];
-		ButtonRenderer[1].material = BlackAndWhite[1];
-		NumberLine.color = Color.white;
-		NumberLine.text = "Decision";
-		SAndC[0].text = "O"; SAndC[1].text = "X";
-		yield return new WaitForSecondsRealtime(0.04194304f);
-		
-		ButtonRenderer[0].material = BlackAndWhite[1];
-		ButtonRenderer[1].material = BlackAndWhite[0];
-		NumberLine.color = Color.black;
-		NumberLine.text = "Is";
-		SAndC[0].text = "X"; SAndC[1].text = "O";
-		yield return new WaitForSecondsRealtime(0.04194304f);
-
-
 		if (Answer == Tables)
 		{
 			Module.HandlePass();
 			Audio.PlaySoundAtTransform(SFX[2].name, transform);
-			ButtonRenderer[0].material = BlackAndWhite[1];
-			ButtonRenderer[1].material = BlackAndWhite[0];
-			NumberLine.color = Color.black;
-			NumberLine.text = "Peace";
-			SAndC[0].text = ""; SAndC[1].text = "";
 			Debug.LogFormat("[Negativity #{0}] The balanced was preserved. Module solved.", moduleId);
 		}
+		
 		else
 		{
-			ButtonRenderer[0].material = BlackAndWhite[0];
-			ButtonRenderer[1].material = BlackAndWhite[1];
-			NumberLine.color = Color.white;
-			NumberLine.text = "Chaos";
-			SAndC[0].text = ""; SAndC[1].text = "";
+			Tables = "";
 			yield return new WaitForSecondsRealtime(0.5f);
 			Module.HandleStrike();
 			Debug.LogFormat("[Negativity #{0}] The balanced was destroyed. The balanced is being restored. A strike is given as a punishment.", moduleId);
-			Playable = true; Totale = 0; KSop = 0; RotationsNumber = 0; SAndC[0].text = "C"; SAndC[1].text = "S"; 
-			for (int x = 0; x < 9; x++)
-			{
-				TernaryFunctions[0][x] = 0;
-			}
+			Playable = true; SAndC[0].text = "C"; SAndC[1].text = "S";
+			Totale = KSop = RotationsNumber = 0;
+			TernaryFunctions[0] = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
 			NumberSheet();
 		}
 	}
 	
 	//twitch plays
     #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} submit presses the submit button | !{0} clear presses the clear button | !{0} tick / !{0} silent will determine if the cycle produces a sound or not | !{0} [- or +] delivers the answer to the module (This command can be performed in a chain)";
+    private readonly string TwitchHelpMessage = @"!{0} submit presses the submit button | !{0} clear presses the clear button | !{0} [- or +] delivers the answer to the module (This command can be performed in a chain)";
     #pragma warning restore 414
 	
 	string[] Validity = {"+", "-"};
@@ -644,30 +291,6 @@ public class NegativityScript : MonoBehaviour
 			}
 			
 			Buttons[2].OnInteract();
-		}
-		
-		else if (Regex.IsMatch(command, @"^\s*silent\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-		{
-			yield return null;
-			if (Silent == true)
-			{
-				yield return "sendtochaterror The cycle is already silent.";
-				yield break;
-			}
-			Silent = true;
-			yield return "sendtochat The cycle is now producing no sound.";
-		}
-		
-		else if (Regex.IsMatch(command, @"^\s*tick\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-		{
-			yield return null;
-			if (Silent == false)
-			{
-				yield return "sendtochaterror The cycle is already ticking.";
-				yield break;
-			}
-			Silent = false;
-			yield return "sendtochat The cycle is now producing a ticking sound.";
 		}
 		
 		else if (parameters[0].Contains('+') || parameters[0].Contains('-'))
