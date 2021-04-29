@@ -53,7 +53,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4225185708758316}
   - component: {fileID: 33047210610107126}
-  - component: {fileID: 65843154654839898}
   - component: {fileID: 23759138006568714}
   - component: {fileID: 114321335015146720}
   m_Layer: 0
@@ -72,7 +71,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4612949625331472}
   - component: {fileID: 33189607060046186}
-  - component: {fileID: 65680572861292202}
   - component: {fileID: 23517973525560330}
   - component: {fileID: 114889282023598324}
   m_Layer: 0
@@ -174,7 +172,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4928620493666946}
   - component: {fileID: 33567777470983654}
-  - component: {fileID: 65680122884010992}
   - component: {fileID: 114119401445403726}
   - component: {fileID: 114184115611563704}
   m_Layer: 0
@@ -240,7 +237,6 @@ GameObject:
   - component: {fileID: 4767440345784536}
   - component: {fileID: 33821001074712308}
   - component: {fileID: 23363564806066812}
-  - component: {fileID: 95088214034068804}
   - component: {fileID: 114998306841988132}
   m_Layer: 0
   m_Name: Component_PuzzleBackground
@@ -288,7 +284,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4805963531975748}
   - component: {fileID: 33963296499337544}
-  - component: {fileID: 65843867703457316}
   - component: {fileID: 23056168136816558}
   - component: {fileID: 114791168356605864}
   m_Layer: 0
@@ -307,7 +302,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4583395186484758}
   - component: {fileID: 33670823845666796}
-  - component: {fileID: 65983436901601792}
   - component: {fileID: 114606525705204572}
   - component: {fileID: 114388640240684736}
   m_Layer: 0
@@ -326,7 +320,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4549886795381674}
   - component: {fileID: 33087165446415788}
-  - component: {fileID: 65491888652056872}
   - component: {fileID: 114235968058463960}
   - component: {fileID: 114619352679320754}
   m_Layer: 0
@@ -362,7 +355,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4984183908232792}
   - component: {fileID: 33066857021925590}
-  - component: {fileID: 65967801316863420}
   - component: {fileID: 23740528131069590}
   - component: {fileID: 114664580430323922}
   m_Layer: 0
@@ -381,7 +373,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4300340959951928}
   - component: {fileID: 33632788936324860}
-  - component: {fileID: 65623795856244032}
   - component: {fileID: 23403203245736062}
   - component: {fileID: 114236236927474202}
   m_Layer: 0
@@ -400,7 +391,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4945984521087308}
   - component: {fileID: 33806111427061432}
-  - component: {fileID: 65840565283611330}
   - component: {fileID: 23424928880970034}
   - component: {fileID: 114740201593564338}
   m_Layer: 0
@@ -419,7 +409,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4035874550503840}
   - component: {fileID: 33273561544475884}
-  - component: {fileID: 65152767771606996}
   - component: {fileID: 23595723613642612}
   - component: {fileID: 114476043168383140}
   m_Layer: 0
@@ -438,7 +427,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4804213595891940}
   - component: {fileID: 33191045387030280}
-  - component: {fileID: 65000574635829754}
   - component: {fileID: 23172096897604028}
   - component: {fileID: 114860980157450916}
   m_Layer: 0
@@ -1396,155 +1384,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1641194124522454}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65000574635829754
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938581266790662}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65152767771606996
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1916172072172892}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65491888652056872
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1723705803834158}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65623795856244032
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1869120682254586}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65680122884010992
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296278291133090}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65680572861292202
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1168269736501242}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65840565283611330
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1903495950192034}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65843154654839898
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1123342312167888}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65843867703457316
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1641194124522454}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65967801316863420
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1794623701758238}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65983436901601792
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1670417390435316}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!95 &95088214034068804
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1497927346140490}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 1c46642b7f907d844bcdfcca8625afdd, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
 --- !u!102 &102003263899107480
 TextMesh:
   serializedVersion: 3
@@ -1927,11 +1766,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parent: {fileID: 0}
   Children:
-  - {fileID: 114619352679320754}
-  - {fileID: 114184115611563704}
+  - {fileID: 0}
   - {fileID: 114388640240684736}
+  - {fileID: 0}
+  - {fileID: 114619352679320754}
+  - {fileID: 0}
+  - {fileID: 114184115611563704}
   IsPassThrough: 0
-  ChildRowLength: 0
+  ChildRowLength: 3
   Highlight: {fileID: 114425255016157706}
   SelectableColliders: []
   DefaultSelectableIndex: 0
