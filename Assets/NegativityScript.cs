@@ -34,6 +34,9 @@ public class NegativityScript : MonoBehaviour
 	
 	bool Playable = false;
 	bool Silent = false;
+	bool IncorrectAnswer = false;
+	bool InSubmission = false;
+	bool Clearing = false;
 
 	private int Totale = 0;
 	string Tables;
@@ -76,7 +79,7 @@ public class NegativityScript : MonoBehaviour
 			if (Random.Range(0,2) != 0) Numbering[a] = -Numbering[a];
 			if (Status[a] == 0) NumberingConverted[a] = -Numbering[a]; else NumberingConverted[a] = Numbering[a];
 			Totale += NumberingConverted[a];
-			Debug.LogFormat("[Negativity #{2}] Original Number : {0}, Converted Number: {1}", Numbering[a].ToString(), NumberingConverted[a].ToString(), moduleId);
+			Debug.LogFormat("[Negativity #{2}] Original Number: {0}, Converted Number: {1}", Numbering[a].ToString(), NumberingConverted[a].ToString(), moduleId);
 		}
 		Debug.LogFormat("[Negativity #{0}] The total value: {1}", moduleId, Totale.ToString());
 		
@@ -195,6 +198,7 @@ public class NegativityScript : MonoBehaviour
 
 	IEnumerator Clearer()
 	{
+		Clearing = true;
 		string Copper = Ternary.text;
 		int Heal = Ternary.text.Length;
 		for (int g = 0; g < Heal; g++)
@@ -203,14 +207,18 @@ public class NegativityScript : MonoBehaviour
 			Ternary.text = Copper;
 			yield return new WaitForSecondsRealtime(0.05f);
 		}
+		Clearing = false;
 	}
 	
 	IEnumerator MusicPlay()
 	{
+		InSubmission = true;
 		Playable = false;
-		Debug.LogFormat("[Negativity #{0}] The balanced was disturbed. You are being judged", moduleId);
+		Debug.LogFormat("[Negativity #{0}] The balanced was disturbed. You are being judged.", moduleId);
 		string Answer = Ternary.text;
 		Ternary.text = "";
+		if (Answer != Tables)
+			IncorrectAnswer = true;
 		Audio.PlaySoundAtTransform(SFX[3].name, transform);
 		float Switches = 0.2f;
 		string[] Cycles = {"P", "N", "Po", "Ne", "Pos", "Neg", "Posi", "Nega", "Posit", "Negat", "Positi", "Negati", "Positiv", "Negativ", "Positivi", "Negativi", "Positivit", "Negativit", "Positivity", "Negativity", "The", "Balance", "Was", "Disturbed", "I", "Will", "Restore", "Balance", "I", "Will", "Provide", "Judgement", "My", "Final", "Decision", "Is"};
@@ -249,7 +257,9 @@ public class NegativityScript : MonoBehaviour
 			Totale = KSop = RotationsNumber = 0;
 			TernaryFunctions[0] = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
 			NumberSheet();
+			IncorrectAnswer = false;
 		}
+		InSubmission = false;
 	}
 	
 	//twitch plays
@@ -349,4 +359,71 @@ public class NegativityScript : MonoBehaviour
 			}
 		}
 	}
+
+	IEnumerator TwitchHandleForcedSolve()
+    {
+		while ((!Playable && !InSubmission) || Clearing) yield return true;
+		if (IncorrectAnswer)
+        {
+			StopAllCoroutines();
+			SAndC[0].text = ""; SAndC[1].text = "";
+			ButtonRenderer[0].material = BlackAndWhite[1];
+			ButtonRenderer[1].material = BlackAndWhite[0];
+			NumberLine.color = Color.black;
+			NumberLine.text = "Peace";
+			Module.HandlePass();
+			Audio.PlaySoundAtTransform(SFX[2].name, transform);
+			yield break;
+        }
+		if (KSop == 0)
+        {
+			Buttons[1].OnInteract();
+			yield return new WaitForSeconds(0.1f);
+		}
+		if (!InSubmission)
+        {
+			bool clrPress = false;
+			if (Ternary.text.Length > Tables.Length)
+			{
+				Buttons[2].OnInteract();
+				while (Clearing) yield return true;
+				clrPress = true;
+			}
+			else
+			{
+				for (int i = 0; i < Ternary.text.Length; i++)
+				{
+					if (i == Tables.Length)
+						break;
+					if (Ternary.text[i] != Tables[i])
+					{
+						Buttons[2].OnInteract();
+						while (Clearing) yield return true;
+						clrPress = true;
+						break;
+					}
+				}
+			}
+			int start = Ternary.text.Length;
+			if (clrPress)
+				start = 0;
+			for (int i = start; i < Tables.Length; i++)
+            {
+				if (Tables[i] == '-')
+				{
+					while (Switcher != 0) yield return true;
+					Buttons[0].OnInteract();
+					yield return new WaitForSeconds(0.1f);
+				}
+				else if (Tables[i] == '+')
+				{
+					while (Switcher != 1) yield return true;
+					Buttons[0].OnInteract();
+					yield return new WaitForSeconds(0.1f);
+				}
+			}
+			Buttons[1].OnInteract();
+		}
+		while (InSubmission) yield return true;
+    }
 }
